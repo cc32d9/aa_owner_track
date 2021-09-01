@@ -1,0 +1,20 @@
+[Unit]
+Description=aa_owner_track DB Writer
+After=mariadb.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/aa_owner_track_%i
+
+ExecStart=/usr/bin/perl /opt/aa_owner_track/aa_owner_track_dbwriter.pl --network=%i $DBWRITE_OPTS
+TimeoutSec=45s
+Restart=always
+User=root
+Group=daemon
+KillMode=control-group
+
+
+[Install]
+WantedBy=multi-user.target
+
+

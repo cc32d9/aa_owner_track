@@ -1,0 +1,19 @@
+use aa_owner_track;
+
+CREATE TABLE %%_ASSET_OWNERSHIP
+(
+    asset_id             BIGINT UNSIGNED NOT NULL,
+    collection_name      VARCHAR(13) NOT NULL,
+    schema_name          VARCHAR(13)  NOT NULL,
+    template_id          BIGINT NOT NULL,
+    owner                VARCHAR(13)  NOT NULL,
+    start_block_num      BIGINT NOT NULL,
+    start_block_time     DATETIME NOT NULL,
+    end_block_num        BIGINT NOT NULL,
+    end_block_time       DATETIME NOT NULL
+)  ENGINE=InnoDB;
+
+CREATE UNIQUE INDEX %%_ASSET_OWNERSHIP_I01 ON %%_ASSET_OWNERSHIP (asset_id, end_block_num);
+CREATE INDEX %%_ASSET_OWNERSHIP_I02 ON %%_ASSET_OWNERSHIP (end_block_num, owner);
+
+
