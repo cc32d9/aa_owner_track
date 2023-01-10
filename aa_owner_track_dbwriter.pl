@@ -69,8 +69,8 @@ die($DBI::errstr) unless $dbh;
 
 
 my $sth_upd_sync = $dbh->prepare
-    ('INSERT INTO SYNC (network, block_num) VALUES(?,?) ' .
-     'ON DUPLICATE KEY UPDATE block_num=?');
+    ('INSERT INTO SYNC (network, block_num, block_time) VALUES(?,?,?) ' .
+     'ON DUPLICATE KEY UPDATE block_num=?, block_time=?');
 
 
 my $sth_end_ownership = $dbh->prepare
@@ -253,7 +253,9 @@ sub process_data
 
             if( $uncommitted_block > $stored_block )
             {
-                $sth_upd_sync->execute($network, $uncommitted_block, $uncommitted_block);
+                my $block_time = $data->{'block_timestamp'};
+                $block_time =~ s/T/ /;
+                $sth_upd_sync->execute($network, $uncommitted_block, $block_time, $uncommitted_block, $block_time);
                 $dbh->commit();
                 $stored_block = $uncommitted_block;
             }
